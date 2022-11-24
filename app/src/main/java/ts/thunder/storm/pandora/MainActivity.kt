@@ -29,6 +29,8 @@ class MainActivity : AppCompatActivity() {
     var locationFlag: Boolean = false
     var coinName:String = "FCT2"
 
+    val TRADE_PRICE = "trade_price"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
@@ -71,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                 Request.Method.GET,
                 url,
                 {
-                    binding.textViewCoinValue.text = findItem(it.toString(),"opening_price")
+                    binding.textViewCoinValue.text = findItem(it.toString(),TRADE_PRICE)
                 },{error->
                     Toast.makeText(this,"Error : $error",Toast.LENGTH_SHORT).show()
                 }
