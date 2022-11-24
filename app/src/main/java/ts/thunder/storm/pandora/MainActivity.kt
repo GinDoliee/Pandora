@@ -6,6 +6,7 @@ import android.icu.text.DecimalFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.EditText
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.android.volley.Request
@@ -23,6 +24,7 @@ import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.StringRequest
 import org.json.JSONArray
 import org.json.JSONTokener
+import java.io.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -39,6 +41,12 @@ class MainActivity : AppCompatActivity() {
     val TRADE_PRICE = "trade_price"
     val FCT2_AMOUNT = "amount"
 
+
+    val FCT2_ADD_LENGTH = 44
+
+    lateinit var FCT_Address:String
+    lateinit var filePath:String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
@@ -49,17 +57,18 @@ class MainActivity : AppCompatActivity() {
         binding.textViewCoinValue.text = coinPrice.toString()
         binding.textViewTotalKRW.text = coinTotalSum.toString()
 
+
+        filePath = filesDir.path + "/AddText.txt"
+        readAddressFile(binding.editAddress, filePath)
+
+
 /*
         binding.btnConnect.setOnClickListener(){
             val channel = Channel<Int>()
             val scope = CoroutineScope(Dispatchers.Default + Job())
 
             scope.launch {
-
-
                 val result = 10
-
-
                 channel.send(result)
             }
 
@@ -74,34 +83,40 @@ class MainActivity : AppCompatActivity() {
 */
 
         binding.btnConnectFCT.setOnClickListener(){
-            Toast.makeText(this,"Connecting FCT2 Wallet",Toast.LENGTH_SHORT).show()
 
-            val url = "https://lcd-mainnet.firmachain.dev:1317/cosmos/staking/v1beta1/delegations/firma1xx56w64cyl2hc9us3q6p5wptx040fgatczmqkm"
+            if(FCT_Address.length == FCT2_ADD_LENGTH) {
 
-            val stringRequest = StringRequest(
-                Request.Method.GET,
-                url,
-                Response.Listener<String> {
+                Toast.makeText(this, "Connecting FCT2 Wallet", Toast.LENGTH_SHORT).show()
+                val url =
+                    "https://lcd-mainnet.firmachain.dev:1317/cosmos/staking/v1beta1/delegations/" + FCT_Address
+                coinAmount = 0F
+                val stringRequest = StringRequest(
+                    Request.Method.GET,
+                    url,
+                    Response.Listener<String> {
 
-                    val response = JSONObject(JSONTokener(it))
+                        val response = JSONObject(JSONTokener(it))
 
-                    val jsonArray : JSONArray = response.optJSONArray("delegation_responses")
-                    val types : List<String> = (0 until jsonArray.length()).map{
-                        jsonArray.getString(it).toString()
-                    }
+                        val jsonArray: JSONArray = response.optJSONArray("delegation_responses")
+                        val types: List<String> = (0 until jsonArray.length()).map {
+                            jsonArray.getString(it).toString()
+                        }
 
-                    for (i in 0 until types.size) {
-                        coinAmount += findItem(types[i],FCT2_AMOUNT).toFloat()/DIVIDE_VALUE
-                        Log.d("Hey", "coinAmount : $coinAmount")
-                    }
-                    binding.textViewAmount.text = coinAmount.toString()
-                },
-                Response.ErrorListener { error ->
-                    Toast.makeText(this,"FCT Error : $error",Toast.LENGTH_SHORT).show()
-                })
+                        for (i in 0 until types.size) {
+                            coinAmount += findItem(types[i], FCT2_AMOUNT).toFloat() / DIVIDE_VALUE
+                            Log.d("Hey", "coinAmount : $coinAmount")
+                        }
+                        binding.textViewAmount.text = coinAmount.toString()
+                    },
+                    Response.ErrorListener { error ->
+                        Toast.makeText(this, "FCT Error : $error", Toast.LENGTH_SHORT).show()
+                    })
 
-            val queue = Volley.newRequestQueue(this)
-            queue.add(stringRequest)
+                val queue = Volley.newRequestQueue(this)
+                queue.add(stringRequest)
+            }else{
+                Toast.makeText(this,"Need to input address", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.btnConnectUpBit.setOnClickListener {
@@ -127,7 +142,34 @@ class MainActivity : AppCompatActivity() {
         binding.btnTotalSum.setOnClickListener(){
             coinTotalSum = (coinAmount * coinPrice).toLong()
             val decimal = DecimalFormat("#,###.##")
-            binding.textViewTotalKRW.text = decimal.format(coinTotalSum).toString()
+            binding.textViewTotalKRW.text = decimal.format(coinTotalSum).toString() + "원"
+
+
+        }
+
+        binding.btnAddSave.setOnClickListener(){
+
+            FCT_Address = binding.editAddress.getText().toString()
+            Log.d("Hey","Edit Address : $FCT_Address , Length : ${FCT_Address.length}")
+
+            if(FCT_Address.length != FCT2_ADD_LENGTH ){
+                Toast.makeText(this,"Need to input address", Toast.LENGTH_SHORT).show()
+            }else {
+
+                val file = File(filePath)
+
+                if (!file.exists()) {
+                    file.createNewFile()
+                }
+
+                val outputStream: OutputStream = file.outputStream()
+                outputStream.write(FCT_Address.length + 1)
+
+                val osw: OutputStreamWriter = outputStream.writer()
+                osw.write(FCT_Address)
+                osw.close()
+            }
+
         }
     }
 
@@ -145,8 +187,23 @@ class MainActivity : AppCompatActivity() {
         }else{
             return reponse.substring(itemLast+1,valueLast)
         }
+    }
 
+    fun readAddressFile(editText: EditText,path: String) {
+        val file = File(path)
 
+        if(file.exists()){
+            val inputStream:InputStream = file.inputStream()
+            Log.d("Hey","Address Length : ${inputStream.read()}")
+            val address : InputStreamReader= inputStream.reader()
+            FCT_Address = address.readText()
+            address.close()
+            Log.d("Hey","Address : $FCT_Address")
+        }else{
+            FCT_Address = "Need to Input Address"
+            Toast.makeText(this,"There is no address file", Toast.LENGTH_SHORT).show()
+        }
+        editText.setText(FCT_Address)
     }
 
 }
