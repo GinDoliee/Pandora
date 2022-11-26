@@ -21,6 +21,12 @@ import kotlinx.coroutines.channels.consumeEach
 import org.json.JSONObject
 import ts.thunder.storm.pandora.databinding.ActivityMainBinding
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.StringRequest
 import org.json.JSONArray
@@ -69,6 +75,8 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.viewpager.adapter = MyAdapter(this)
+
         binding.textViewCoinName.text = coinName
 
 
@@ -82,7 +90,6 @@ class MainActivity : AppCompatActivity() {
         isUpdateCoin = true
 
         UpdateCoin()
-
 
 
         val mainScope = GlobalScope.launch(Dispatchers.Main) {
@@ -128,9 +135,11 @@ class MainActivity : AppCompatActivity() {
                 osw.write(FCT_Address)
                 osw.close()
             }
-
         }
     }
+
+
+
 
     fun UpdateCoin(){
         scopeFCT.launch {
@@ -295,5 +304,18 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+class MyAdapter(activity:FragmentActivity):FragmentStateAdapter(activity){
+    val fragments:List<Fragment>
+    init{
+        fragments = listOf(MainFragment(),SecondFragment(),ThirdFragment())
+    }
 
+    override fun getItemCount(): Int {
+        return fragments.size
+    }
 
+    override fun createFragment(position: Int): Fragment {
+        return fragments[position]
+    }
+
+}
