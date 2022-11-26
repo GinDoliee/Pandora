@@ -137,15 +137,13 @@ class MainActivity : AppCompatActivity() {
             while(isUpdateCoin) {
                 UpdateFCTAmount(urlAvailable, "balances","amount")
                 channel.send(COINAVAILABLE)
-                Thread.sleep(1000)
 
                 UpdateFCTAmount(urlDelegated, "delegation_responses","shares")
                 channel.send(COINDELEGATE)
-                Thread.sleep(1000)
 
                 UpdateFCTAmount(urlReward, "total","amount")
                 channel.send(COINREWARD)
-                Thread.sleep(1000)
+                Thread.sleep(3000)
             }
         }
 
@@ -281,6 +279,12 @@ class MainActivity : AppCompatActivity() {
         Log.d("Hey","onStop")
         isUpdateCoin = false
         super.onStop()
+    }
+
+    override fun onPause() {
+        Log.d("Hey","onPause")
+        isUpdateCoin = false
+        super.onPause()
     }
 
     override fun onRestart() {
