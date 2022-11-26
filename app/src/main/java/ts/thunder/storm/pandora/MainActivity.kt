@@ -31,6 +31,7 @@ import java.io.*
 class MainActivity : AppCompatActivity() {
 
 
+    var isUpdateCoin = true
     val DIVIDE_VALUE = 1000000
 
     var coinName:String = "FCT2"
@@ -44,17 +45,23 @@ class MainActivity : AppCompatActivity() {
     val COINREWARD = 3
     val COINPRICE = 4
 
-
-    var coinTotalSum:Long = 0L
-
     val TRADE_PRICE = "trade_price"
-
 
 
     val FCT2_ADD_LENGTH = 44
 
     lateinit var FCT_Address:String
     lateinit var filePath:String
+
+    val scopeFCT = CoroutineScope(Dispatchers.Default + Job())
+    val scopeUpBit = CoroutineScope(Dispatchers.Default + Job())
+    val channel = Channel<Int>()
+
+
+
+    lateinit var urlAvailable:String
+    lateinit var urlDelegated:String
+    lateinit var urlReward:String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,42 +75,14 @@ class MainActivity : AppCompatActivity() {
         filePath = filesDir.path + "/AddText.txt"
         readAddressFile(binding.editAddress, filePath)
 
+        urlAvailable ="https://lcd-mainnet.firmachain.dev:1317/cosmos/bank/v1beta1/balances/" + FCT_Address
+        urlDelegated ="https://lcd-mainnet.firmachain.dev:1317/cosmos/staking/v1beta1/delegations/" + FCT_Address
+        urlReward = "https://lcd-mainnet.firmachain.dev:1317/cosmos/distribution/v1beta1/delegators/"+FCT_Address+ "/rewards"
 
-        val urlAvailable ="https://lcd-mainnet.firmachain.dev:1317/cosmos/bank/v1beta1/balances/" + FCT_Address
-        val urlDelegated ="https://lcd-mainnet.firmachain.dev:1317/cosmos/staking/v1beta1/delegations/" + FCT_Address
-        val urlReward = "https://lcd-mainnet.firmachain.dev:1317/cosmos/distribution/v1beta1/delegators/"+FCT_Address+ "/rewards"
+        isUpdateCoin = true
 
+        UpdateCoin()
 
-        val channel = Channel<Int>()
-        val channelUpBit = Channel<Boolean>()
-
-
-        val scopeFCT = CoroutineScope(Dispatchers.Default + Job())
-        val scopeUpBit = CoroutineScope(Dispatchers.Default + Job())
-
-        scopeFCT.launch {
-            while(true) {
-                UpdateFCTAmount(urlAvailable, "balances","amount")
-                channel.send(COINAVAILABLE)
-                Thread.sleep(1000)
-
-                UpdateFCTAmount(urlDelegated, "delegation_responses","shares")
-                channel.send(COINDELEGATE)
-                Thread.sleep(1000)
-
-                UpdateFCTAmount(urlReward, "total","amount")
-                channel.send(COINREWARD)
-                Thread.sleep(1000)
-            }
-        }
-
-        scopeUpBit.launch {
-            while(true) {
-                UpdateUpbit(coinName)
-                channel.send(COINPRICE)
-                Thread.sleep(3000)
-            }
-        }
 
 
         val mainScope = GlobalScope.launch(Dispatchers.Main) {
@@ -151,6 +130,34 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    fun UpdateCoin(){
+        scopeFCT.launch {
+            while(isUpdateCoin) {
+                UpdateFCTAmount(urlAvailable, "balances","amount")
+                channel.send(COINAVAILABLE)
+                Thread.sleep(1000)
+
+                UpdateFCTAmount(urlDelegated, "delegation_responses","shares")
+                channel.send(COINDELEGATE)
+                Thread.sleep(1000)
+
+                UpdateFCTAmount(urlReward, "total","amount")
+                channel.send(COINREWARD)
+                Thread.sleep(1000)
+            }
+        }
+
+        scopeUpBit.launch {
+            while(isUpdateCoin) {
+                UpdateUpbit(coinName)
+                channel.send(COINPRICE)
+                Thread.sleep(3000)
+            }
+        }
+
+
     }
 
     fun UpdateUpbit(name:String){
@@ -270,6 +277,18 @@ class MainActivity : AppCompatActivity() {
         editText.setText(FCT_Address)
     }
 
+    override fun onStop() {
+        Log.d("Hey","onStop")
+        isUpdateCoin = false
+        super.onStop()
+    }
+
+    override fun onRestart() {
+        Log.d("Hey","onRestart")
+        isUpdateCoin = true
+        UpdateCoin()
+        super.onRestart()
+    }
 }
 
 
