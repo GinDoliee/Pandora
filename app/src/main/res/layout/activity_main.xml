@@ -97,10 +97,11 @@
         </LinearLayout>
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.25"
+        android:layout_weight="0.5"
 
         android:orientation="vertical">
 
@@ -109,8 +110,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:weightSum="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="1">
 
             <TextView
                 android:id="@+id/textView"
@@ -132,7 +133,6 @@
         </LinearLayout>
 
 
-
         <LinearLayout
             android:id="@+id/fragement_content"
             android:layout_width="match_parent"
@@ -140,12 +140,10 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <androidx.viewpager2.widget.ViewPager2
-                xmlns:android="http://schemas.android.com/apk/res/android"
+            <androidx.viewpager2.widget.ViewPager2 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
+                android:layout_height="match_parent" />
 
         </LinearLayout>
 
@@ -174,12 +172,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.25"
-        android:orientation="vertical"/>
 
     <LinearLayout
         android:layout_width="match_parent"
