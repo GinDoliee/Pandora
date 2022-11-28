@@ -2,7 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#2196F3"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:background="@drawable/ic_main_background"
+
     android:orientation="vertical">
 
     <LinearLayout
@@ -14,13 +20,15 @@
             android:id="@+id/textFCTAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5sp"
-            android:textAlignment="center" />
+            android:paddingRight="30dp"
+            android:layout_marginBottom="5dp"
+            android:textAlignment="textEnd" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="2dp"
         android:orientation="horizontal">
 
         <TextView
@@ -87,14 +95,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/textView12"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/textFCTTotalAmount"
@@ -102,7 +104,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAlignment="center"
-            android:textSize="24sp"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textFCTTotalValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>

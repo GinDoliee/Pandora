@@ -1,5 +1,6 @@
 package ts.thunder.storm.pandora
 
+import android.app.Activity
 import android.icu.text.DecimalFormat
 import android.os.Bundle
 import android.util.Log
@@ -36,24 +37,23 @@ class MainFragment : Fragment() {
     lateinit var urlAvailable:String
     lateinit var urlDelegated:String
     lateinit var urlReward:String
+    lateinit var urlRewardLast:String
 
     lateinit var FCT_Address:String
-    lateinit var filePath:String
+
 
     lateinit var binding : FragmentMainBinding
 
-    val FCT2_ADD_LENGTH = 44
+
 
     val DIVIDE_VALUE = 1000000
-    val COINAVAILABLE = 1
-    val COINDELEGATE = 2
-    val COINREWARD = 3
+
 
     var coinAvailableAmount:Float = 0.0F
     var coinDelegatedAmount:Float = 0.0F
     var coinRewardAmount:Float = 0.0F
 
-
+    var isUpdateFCT:Boolean = false
 
 
     val channel = Channel<Int>()
@@ -71,72 +71,61 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        mainActivity = context as MainActivity
-        filePath = mainActivity.filesDir.path + "/AddText.txt"
-        readAddressFile(filePath)
+        isUpdateFCT = true
 
-        urlAvailable ="https://lcd-mainnet.firmachain.dev:1317/cosmos/bank/v1beta1/balances/" + FCT_Address
-        urlDelegated ="https://lcd-mainnet.firmachain.dev:1317/cosmos/staking/v1beta1/delegations/" + FCT_Address
-        urlReward = "https://lcd-mainnet.firmachain.dev:1317/cosmos/distribution/v1beta1/delegators/"+FCT_Address+ "/rewards"
-        val test = Stake(FCT_Address)
+        mainActivity = context as MainActivity
+
+        urlAvailable ="https://lcd-mainnet.firmachain.dev:1317/cosmos/bank/v1beta1/balances/"
+        urlDelegated ="https://lcd-mainnet.firmachain.dev:1317/cosmos/staking/v1beta1/delegations/"
+        urlReward = "https://lcd-mainnet.firmachain.dev:1317/cosmos/distribution/v1beta1/delegators/"
+        urlRewardLast = "/rewards"
+
+
+        var stakeData = mutableListOf<Stake>()
+
+        for(i in 0 until CommonInfo.TotalAddressNumber){
+            stakeData.add(Stake(CommonInfo.AddressArray.get(i).toString(),CommonInfo.AddressNameArray.get(i).toString()))
+        }
+
+
+        binding.recyclerView.layoutManager = LinearLayoutManager(activity)
+        binding.recyclerView.adapter = MainListAdapter(stakeData)
 
         UpdateCoin()
 
-        val mainScope = GlobalScope.launch(Dispatchers.Main) {
+        GlobalScope.launch(Dispatchers.Main) {
             channel.consumeEach {
-                when(it){
-                    COINAVAILABLE ->
-                        test.coinAvailableAmount = coinAvailableAmount
-                    COINDELEGATE ->
-                        test.coinDelegatedAmount = coinDelegatedAmount
-                    COINREWARD -> {
-                        test.coinRewardAmount = coinRewardAmount
-                    }
+                    var stake = Stake(CommonInfo.AddressArray.get(it).toString(),CommonInfo.AddressNameArray.get(it).toString())
+                    stake.coinAvailableAmount = coinAvailableAmount
+                    stake.coinDelegatedAmount = coinDelegatedAmount
+                    stake.coinRewardAmount = coinRewardAmount
+                    (binding.recyclerView.adapter as MainListAdapter).ChangeItem(it,stake)
                 }
-                val data = mutableListOf<Stake>()
-                data.add(test)
-
-                binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-                binding.recyclerView.adapter = MainListAdapter(data)
-            }
         }
 
         super.onViewCreated(view, savedInstanceState)
     }
 
-
     fun UpdateCoin(){
         scopeFCT.launch {
-            while(true) {
-                UpdateFCTAmount(urlAvailable, "balances","amount")
-                channel.send(COINAVAILABLE)
+            while(isUpdateFCT) {
+                for (i in 0 until CommonInfo.TotalAddressNumber) {
 
-                UpdateFCTAmount(urlDelegated, "delegation_responses","shares")
-                channel.send(COINDELEGATE)
+                    Log.d("Hey", "UpdateCoin : $i")
 
-                UpdateFCTAmount(urlReward, "total","amount")
-                channel.send(COINREWARD)
-                Thread.sleep(3000)
+                    UpdateFCTAmount(urlAvailable+CommonInfo.AddressArray.get(i).toString(), "balances", "amount")
+
+                    UpdateFCTAmount(urlDelegated+CommonInfo.AddressArray.get(i).toString(), "delegation_responses", "shares")
+
+                    UpdateFCTAmount(urlReward+CommonInfo.AddressArray.get(i).toString() + urlRewardLast, "total", "amount")
+                    Thread.sleep(1000)
+                    channel.send(i)
+
+                }
             }
         }
     }
 
-
-    fun readAddressFile(path: String) {
-        val file = File(path)
-
-        if(file.exists()){
-            val inputStream: InputStream = file.inputStream()
-            Log.d("Hey","Address Length : ${inputStream.read()}")
-            val address : InputStreamReader = inputStream.reader()
-            FCT_Address = address.readText()
-            address.close()
-            Log.d("Hey","Address : $FCT_Address")
-        }else{
-            FCT_Address = "Need to Input Address"
-            Toast.makeText(activity,"There is no address file", Toast.LENGTH_SHORT).show()
-        }
-    }
 
     fun findFCTItem(reponse:String, itemName:String):String{
         val itemIndex = reponse.indexOf(itemName)
@@ -149,7 +138,6 @@ class MainFragment : Fragment() {
     fun UpdateFCTAmount(url:String, type:String, item:String){
 
         Log.d("Hey", "UpdateFCTAmout Called")
-        if(FCT_Address.length == FCT2_ADD_LENGTH) {
 
 
             val stringRequest = StringRequest(
@@ -196,12 +184,38 @@ class MainFragment : Fragment() {
 
             val queue = Volley.newRequestQueue(activity)
             queue.add(stringRequest)
-        }else{
-            //Toast.makeText(this,"Need to input address", Toast.LENGTH_SHORT).show()
-        }
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        Log.d("Hey", "MainFrag onPause")
+        isUpdateFCT = false
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("Hey", "MainFrag onStop")
+        isUpdateFCT = false
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("Hey", "MainFrag onStart")
+        if(isUpdateFCT == false){
+            isUpdateFCT = true
+            UpdateCoin()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("Hey", "MainFrag onResume")
+        if(isUpdateFCT == false){
+            isUpdateFCT = true
+            UpdateCoin()
+        }
+    }
 }
 
 
