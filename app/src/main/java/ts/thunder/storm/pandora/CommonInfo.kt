@@ -4,8 +4,8 @@ class CommonInfo {
 
     companion object{
 
-        val AddressArray:Array<String?> = arrayOfNulls<String>(3)
-        val AddressNameArray:Array<String?> = arrayOfNulls<String>(3)
+        val AddressArray:Array<String?> = arrayOfNulls<String>(100)
+        val AddressNameArray:Array<String?> = arrayOfNulls<String>(100)
 
         var TotalAddressNumber = 0
         val FCT2_ADD_LENGTH = 44

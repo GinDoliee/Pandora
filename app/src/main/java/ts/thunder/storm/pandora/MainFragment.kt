@@ -58,7 +58,7 @@ class MainFragment : Fragment() {
 
     val channel = Channel<Int>()
     val scopeFCT = CoroutineScope(Dispatchers.Default + Job())
-
+    var stakeData = mutableListOf<Stake>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,12 +81,10 @@ class MainFragment : Fragment() {
         urlRewardLast = "/rewards"
 
 
-        var stakeData = mutableListOf<Stake>()
 
 
-        for(i in 0 until CommonInfo.TotalAddressNumber){
-            stakeData.add(Stake(CommonInfo.AddressArray.get(i).toString(),CommonInfo.AddressNameArray.get(i).toString()))
-        }
+
+
 
 
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
@@ -96,6 +94,10 @@ class MainFragment : Fragment() {
 
         GlobalScope.launch(Dispatchers.Main) {
             channel.consumeEach {
+                    if((binding.recyclerView.adapter as MainListAdapter).itemCount != CommonInfo.TotalAddressNumber){
+                        ChangeItem()
+                    }
+
                     var stake = Stake(CommonInfo.AddressArray.get(it).toString(),CommonInfo.AddressNameArray.get(it).toString())
                     stake.coinAvailableAmount = coinAvailableAmount
                     stake.coinDelegatedAmount = coinDelegatedAmount
@@ -105,6 +107,14 @@ class MainFragment : Fragment() {
         }
 
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    fun ChangeItem(){
+        stakeData.clear()
+        binding.recyclerView.adapter?.notifyDataSetChanged()
+        for(i in 0 until CommonInfo.TotalAddressNumber){
+            stakeData.add(Stake(CommonInfo.AddressArray.get(i).toString(),CommonInfo.AddressNameArray.get(i).toString()))
+        }
     }
 
     fun UpdateCoin(){

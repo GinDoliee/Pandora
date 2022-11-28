@@ -87,7 +87,6 @@ class MainActivity : AppCompatActivity() {
                         val decimal = DecimalFormat("#,###.##")
                         CommonInfo.FCTValue = coinPrice
 
-
                         if(coinChange<0) {
                             binding.textChange.setTextColor(Color.BLUE)
                             binding.textPrice.setTextColor(Color.BLUE)
@@ -156,6 +155,53 @@ class MainActivity : AppCompatActivity() {
         return reponse.substring(itemLast+1,valueLast)
     }
 
+
+
+    override fun onStop() {
+        Log.d("Hey","onStop")
+        isUpdateCoin = false
+        super.onStop()
+    }
+
+    override fun onPause() {
+        Log.d("Hey","onPause")
+        isUpdateCoin = false
+        super.onPause()
+    }
+
+    override fun onRestart() {
+        Log.d("Hey","onRestart")
+        isUpdateCoin = true
+        UpdateCoin()
+        super.onRestart()
+    }
+
+
+    fun showAddressDialog() {
+        AddressDialog(this) {
+
+            val file = File(filePath)
+
+            if (!file.exists()) {
+                file.createNewFile()
+            }
+
+            val fileWriter = FileWriter(file)
+            val bwForFile =BufferedWriter(fileWriter)
+            bwForFile.write(it.FCT_Name)
+            bwForFile.newLine()
+            bwForFile.write(it.FCT_Address)
+            bwForFile.flush()
+            bwForFile.close()
+
+            CommonInfo.AddressNameArray.set(0,it.FCT_Name)
+            CommonInfo.AddressArray.set(0,it.FCT_Address)
+
+            CommonInfo.TotalAddressNumber = 1
+
+        }.show()
+    }
+
     fun readAddressFile(path: String) {
         val file = File(path)
 
@@ -180,49 +226,27 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStop() {
-        Log.d("Hey","onStop")
-        isUpdateCoin = false
-        super.onStop()
-    }
+    fun writeAddAddressFile(){
 
-    override fun onPause() {
-        Log.d("Hey","onPause")
-        isUpdateCoin = false
-        super.onPause()
-    }
+        val file = File(filePath)
+        file.delete()
 
-    override fun onRestart() {
-        Log.d("Hey","onRestart")
-        isUpdateCoin = true
-        UpdateCoin()
-        super.onRestart()
-    }
+        if (!file.exists()) {
+            file.createNewFile()
+            Log.d("Hey","writeAddAddressFile createNewFile" )
+        }
 
-
-    private fun showAddressDialog() {
-        AddressDialog(this) {
-
-            val file = File(filePath)
-
-            if (!file.exists()) {
-                file.createNewFile()
-            }
-
-            val fileWriter = FileWriter(file)
-            val bwForFile =BufferedWriter(fileWriter)
-            bwForFile.write(it.FCT_Name)
+        val fileWriter = FileWriter(file)
+        val bwForFile =BufferedWriter(fileWriter)
+        for(i in 0 until CommonInfo.TotalAddressNumber){
+            Log.d("Hey","write[$i]")
+            bwForFile.write(CommonInfo.AddressNameArray.get(i))
             bwForFile.newLine()
-            bwForFile.write(it.FCT_Address)
+            bwForFile.write(CommonInfo.AddressArray.get(i))
+            bwForFile.newLine()
+        }
             bwForFile.flush()
             bwForFile.close()
-
-            CommonInfo.AddressArray.set(0,it.FCT_Name)
-            CommonInfo.AddressNameArray.set(0,it.FCT_Address)
-
-            CommonInfo.TotalAddressNumber = 1
-
-        }.show()
     }
 
 }

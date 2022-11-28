@@ -8,176 +8,22 @@
     android:orientation="vertical"
     tools:context=".ThirdFragment">
 
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="1">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textName1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:paddingLeft="10dp"
-                android:text="" />
-
-            <TextView
-                android:id="@+id/textAddress1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:paddingLeft="10dp"
-                android:text=""
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.2">
-
-            <ImageButton
-                android:id="@+id/buttonAdd1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:background="#FFFFFF"
-                android:src="@drawable/ic_edit_add" />
-
-            <ImageButton
-                android:id="@+id/buttonDelete1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:background="#FFFFFF"
-                android:src="@drawable/ic_edit_del" />
-        </LinearLayout>
-
-    </LinearLayout>
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="1">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <Button
+            android:id="@+id/btnAdd"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textName2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:paddingLeft="10dp"
-                android:text="" />
-
-            <TextView
-                android:id="@+id/textAddress2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:paddingLeft="10dp"
-                android:text=""
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.2">
-
-            <ImageButton
-                android:id="@+id/buttonAdd2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:background="#FFFFFF"
-                android:src="@drawable/ic_edit_add" />
-
-            <ImageButton
-                android:id="@+id/buttonDelete2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:background="#FFFFFF"
-                android:src="@drawable/ic_edit_del" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="1">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textName3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:paddingLeft="10dp"
-                android:text="" />
-
-            <TextView
-                android:id="@+id/textAddress3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:paddingLeft="10dp"
-                android:text=""
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.2">
-
-            <ImageButton
-                android:id="@+id/buttonAdd3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:background="#FFFFFF"
-                android:src="@drawable/ic_edit_add" />
-
-            <ImageButton
-                android:id="@+id/buttonDelete3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:background="#FFFFFF"
-                android:src="@drawable/ic_edit_del" />
-        </LinearLayout>
-
+            android:layout_gravity="center_horizontal"
+            android:text="Add" />
     </LinearLayout>
 
 </LinearLayout>
