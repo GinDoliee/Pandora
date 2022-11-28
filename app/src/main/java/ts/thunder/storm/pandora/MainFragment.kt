@@ -83,6 +83,7 @@ class MainFragment : Fragment() {
 
         var stakeData = mutableListOf<Stake>()
 
+
         for(i in 0 until CommonInfo.TotalAddressNumber){
             stakeData.add(Stake(CommonInfo.AddressArray.get(i).toString(),CommonInfo.AddressNameArray.get(i).toString()))
         }
@@ -115,7 +116,7 @@ class MainFragment : Fragment() {
 
                     UpdateFCTAmount(urlAvailable+CommonInfo.AddressArray.get(i).toString(), "balances", "amount")
 
-                    UpdateFCTAmount(urlDelegated+CommonInfo.AddressArray.get(i).toString(), "delegation_responses", "shares")
+                    UpdateFCTAmount(urlDelegated+CommonInfo.AddressArray.get(i).toString(), "delegation_responses", "balance")
 
                     UpdateFCTAmount(urlReward+CommonInfo.AddressArray.get(i).toString() + urlRewardLast, "total", "amount")
                     Thread.sleep(1000)
@@ -124,14 +125,6 @@ class MainFragment : Fragment() {
                 }
             }
         }
-    }
-
-
-    fun findFCTItem(reponse:String, itemName:String):String{
-        val itemIndex = reponse.indexOf(itemName)
-        val itemLast = reponse.indexOf(":",itemIndex)
-        var valueLast = reponse.indexOf("}",itemLast)
-        return reponse.substring(itemLast+2,valueLast-1)
     }
 
 
@@ -157,17 +150,15 @@ class MainFragment : Fragment() {
 
                     if(type.equals("delegation_responses")){
 
-                        val types: List<String> = (0 until jsonArray.length()).map {
-                            jsonArray.getString(it).toString()
-                        }
-
                         var delegateSUM = 0.0F
 
-                        for (i in 0 until types.size) {
-                            delegateSUM += findFCTItem(types[i], item).toFloat() / DIVIDE_VALUE
-                            coinDelegatedAmount = delegateSUM
-                            Log.d("Hey", "coinDelegatedAmount[$i] : $coinDelegatedAmount")
+                        for(i in 0 until jsonArray.length()){
+                            var jsonObject = jsonArray.getJSONObject(i)
+                            var ToString = jsonObject.getString(item)
+                            var ToMap = JSONObject(JSONTokener(ToString))
+                            delegateSUM  += ToMap.get("amount").toString().toFloat()/DIVIDE_VALUE
                         }
+                        coinDelegatedAmount = delegateSUM
                     }
 
                     if(type.equals("total")){
