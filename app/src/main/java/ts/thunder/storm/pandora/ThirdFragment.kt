@@ -1,21 +1,17 @@
 package ts.thunder.storm.pandora
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import ts.thunder.storm.pandora.databinding.FragmentSecondBinding
 import ts.thunder.storm.pandora.databinding.FragmentThirdBinding
 
 
 class ThirdFragment : Fragment() {
 
     lateinit var mainActivity: MainActivity
-    lateinit var mainFragment: MainFragment
 
     lateinit var binding : FragmentThirdBinding
 
@@ -32,34 +28,29 @@ class ThirdFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         mainActivity = context as MainActivity
 
-        for(i in 0 until CommonInfo.TotalAddressNumber){
-            stakeData.add(Stake(CommonInfo.AddressArray.get(i).toString(),CommonInfo.AddressNameArray.get(i).toString()))
+        for(i in 0 until CommonInfo.AddressInfo.size){
+            stakeData.add(Stake(CommonInfo.AddressInfo.get(i).FCT_Address,CommonInfo.AddressInfo.get(i).FCT_Name))
         }
 
+
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        binding.recyclerView.adapter = ThirdListAdapter(stakeData)
+        binding.recyclerView.adapter = ThirdListAdapter(mainActivity, stakeData)
 
         binding.btnAdd.setOnClickListener{
             showListDialog()
         }
-
     }
 
     fun addItem(stake: Stake){
-        stakeData.add(Stake(stake.FCT_Address,stake.FCT_Name))
+        stakeData.add(stake)
         binding.recyclerView.adapter?.notifyDataSetChanged()
-        CommonInfo.AddressArray.set(CommonInfo.TotalAddressNumber,stake.FCT_Address)
-        CommonInfo.AddressNameArray.set(CommonInfo.TotalAddressNumber,stake.FCT_Address)
-        CommonInfo.TotalAddressNumber++
+        CommonInfo.AddressInfo.add(stake)
         mainActivity.writeAddAddressFile()
-
     }
-
 
     private fun showListDialog() {
         AddressDialog(requireContext()) {
             addItem(it)
-            Log.d("Hey","dialog : $it")
         }.show()
     }
 

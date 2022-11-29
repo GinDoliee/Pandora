@@ -33,6 +33,9 @@ import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.StringRequest
 import org.json.JSONArray
 import org.json.JSONTokener
+import ts.thunder.storm.pandora.CommonInfo.Companion.TRADE_CHANGE
+import ts.thunder.storm.pandora.CommonInfo.Companion.TRADE_PRICE
+import ts.thunder.storm.pandora.CommonInfo.Companion.TRADE_VOLUME
 
 import java.io.*
 import java.lang.Math.round
@@ -50,9 +53,7 @@ class MainActivity : AppCompatActivity() {
 
     val COINPRICE = 4
 
-    val TRADE_PRICE = "trade_price"
-    val TRADE_VOLUME = "acc_trade_price_24h"
-    val TRADE_CHANGE = "signed_change_rate"
+
 
     lateinit var filePath:String
 
@@ -69,9 +70,6 @@ class MainActivity : AppCompatActivity() {
         binding.viewpager.adapter = MyAdapter(this)
 
         binding.textName.text = coinName
-
-        binding.textTotalFCT.text ="0"
-        binding.textTotalKWR.text ="0"
 
         filePath = filesDir.path + "/Address.txt"
         readAddressFile(filePath)
@@ -100,7 +98,7 @@ class MainActivity : AppCompatActivity() {
 
                         binding.textPrice.text = coinPrice.toString()
                         binding.textChange.text = decimal.format(coinChange).toString() + "%"
-                        binding.textVolume.text = decimal.format(coinVolume).toString()
+                        binding.textVolume.text = "(mil."+ decimal.format(coinVolume).toString() +")"
                     }
                 }
             }
@@ -120,7 +118,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun UpdateUpbit(name:String){
-
         Log.d("Hey", "UpdateUpbit Called")
         val url = "https://api.upbit.com/v1/ticker?markets=KRW-"+name
 
@@ -194,10 +191,8 @@ class MainActivity : AppCompatActivity() {
             bwForFile.flush()
             bwForFile.close()
 
-            CommonInfo.AddressNameArray.set(0,it.FCT_Name)
-            CommonInfo.AddressArray.set(0,it.FCT_Address)
-
-            CommonInfo.TotalAddressNumber = 1
+            CommonInfo.AddressInfo.add(0, it)
+            //CommonInfo.TotalAddressNumber = 1
 
         }.show()
     }
@@ -214,12 +209,11 @@ class MainActivity : AppCompatActivity() {
                 val nickname = br.readLine()?:break
                 val address = br.readLine()?:break
 
-                CommonInfo.AddressArray.set(index, address)
-                CommonInfo.AddressNameArray.set(index,nickname)
+                CommonInfo.AddressInfo.add(index,Stake(address,nickname))
 
                 index++
             }
-            CommonInfo.TotalAddressNumber = index
+            //CommonInfo.TotalAddressNumber = index
             br.close()
         }else{
             showAddressDialog()
@@ -238,11 +232,11 @@ class MainActivity : AppCompatActivity() {
 
         val fileWriter = FileWriter(file)
         val bwForFile =BufferedWriter(fileWriter)
-        for(i in 0 until CommonInfo.TotalAddressNumber){
+        for(i in 0 until CommonInfo.AddressInfo.size){
             Log.d("Hey","write[$i]")
-            bwForFile.write(CommonInfo.AddressNameArray.get(i))
+            bwForFile.write(CommonInfo.AddressInfo.get(i).FCT_Name)
             bwForFile.newLine()
-            bwForFile.write(CommonInfo.AddressArray.get(i))
+            bwForFile.write(CommonInfo.AddressInfo.get(i).FCT_Address)
             bwForFile.newLine()
         }
             bwForFile.flush()

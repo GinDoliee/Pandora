@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 62 (91390) - https://sketch.com -->
+    <title>ic_export</title>
+    <desc>Created with Sketch.</desc>
+    <g id="ic_export" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M25.964,17.3863 L25.964,23.2503 C25.964,24.6313 24.845,25.7503 23.464,25.7503 L12.5,25.7503 C11.119,25.7503 10,24.6313 10,23.2503 L10,12.7853 C10,11.4053 11.119,10.2853 12.5,10.2853 L19.377,10.2853" id="import" stroke="#9EBA5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        <g id="Group" transform="translate(20.521275, 15.000000) scale(-1, -1) translate(-20.521275, -15.000000) translate(14.521275, 9.000000)" stroke="#9EBA5A" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+            <path d="M11.1321252,0 C11.1321252,0.02 11.1321252,1.144 11.1321252,1.163 C11.1011252,5.316 7.75312524,8.674 3.63012524,8.674 L1.23612524,8.674" id="Stroke-3"></path>
+            <path d="M2.84262524,11.7295 L0.148625237,9.0355 C-0.0493747627,8.8375 -0.0493747627,8.5175 0.147625237,8.3195 L2.83662524,5.6195" id="Stroke-5"></path>
+        </g>
+        <rect x="0" y="0" width="36" height="36"></rect>
+    </g>
+</svg>

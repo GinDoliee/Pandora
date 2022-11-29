@@ -22,6 +22,7 @@ import kotlinx.coroutines.channels.consumeEach
 import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
+import ts.thunder.storm.pandora.CommonInfo.Companion.DIVIDE_VALUE
 import ts.thunder.storm.pandora.databinding.FragmentMainBinding
 import ts.thunder.storm.pandora.databinding.MainItemDataBinding
 import java.io.File
@@ -39,15 +40,7 @@ class MainFragment : Fragment() {
     lateinit var urlReward:String
     lateinit var urlRewardLast:String
 
-    lateinit var FCT_Address:String
-
-
     lateinit var binding : FragmentMainBinding
-
-
-
-    val DIVIDE_VALUE = 1000000
-
 
     var coinAvailableAmount:Float = 0.0F
     var coinDelegatedAmount:Float = 0.0F
@@ -80,13 +73,6 @@ class MainFragment : Fragment() {
         urlReward = "https://lcd-mainnet.firmachain.dev:1317/cosmos/distribution/v1beta1/delegators/"
         urlRewardLast = "/rewards"
 
-
-
-
-
-
-
-
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
         binding.recyclerView.adapter = MainListAdapter(stakeData)
 
@@ -94,11 +80,11 @@ class MainFragment : Fragment() {
 
         GlobalScope.launch(Dispatchers.Main) {
             channel.consumeEach {
-                    if((binding.recyclerView.adapter as MainListAdapter).itemCount != CommonInfo.TotalAddressNumber){
-                        ChangeItem()
-                    }
+                if((binding.recyclerView.adapter as MainListAdapter).itemCount != CommonInfo.AddressInfo.size){
+                    ChangeItem()
+                }
 
-                    var stake = Stake(CommonInfo.AddressArray.get(it).toString(),CommonInfo.AddressNameArray.get(it).toString())
+                    var stake = Stake(CommonInfo.AddressInfo.get(it).FCT_Address,CommonInfo.AddressInfo.get(it).FCT_Name)
                     stake.coinAvailableAmount = coinAvailableAmount
                     stake.coinDelegatedAmount = coinDelegatedAmount
                     stake.coinRewardAmount = coinRewardAmount
@@ -110,29 +96,34 @@ class MainFragment : Fragment() {
     }
 
     fun ChangeItem(){
+
         stakeData.clear()
-        binding.recyclerView.adapter?.notifyDataSetChanged()
-        for(i in 0 until CommonInfo.TotalAddressNumber){
-            stakeData.add(Stake(CommonInfo.AddressArray.get(i).toString(),CommonInfo.AddressNameArray.get(i).toString()))
+        for(i in 0 until CommonInfo.AddressInfo.size){
+            stakeData.add(Stake(CommonInfo.AddressInfo.get(i).FCT_Address,CommonInfo.AddressInfo.get(i).FCT_Name))
         }
+        binding.recyclerView.adapter?.notifyDataSetChanged()
     }
 
     fun UpdateCoin(){
         scopeFCT.launch {
             while(isUpdateFCT) {
-                for (i in 0 until CommonInfo.TotalAddressNumber) {
+
+                for (i in 0 until CommonInfo.AddressInfo.size) {
 
                     Log.d("Hey", "UpdateCoin : $i")
+                    val address =CommonInfo.AddressInfo.get(i).FCT_Address
 
-                    UpdateFCTAmount(urlAvailable+CommonInfo.AddressArray.get(i).toString(), "balances", "amount")
+                    UpdateFCTAmount(urlAvailable+address, "balances", "amount")
+                    UpdateFCTAmount(urlDelegated+address, "delegation_responses", "balance")
+                    UpdateFCTAmount(urlReward+address + urlRewardLast, "total", "amount")
 
-                    UpdateFCTAmount(urlDelegated+CommonInfo.AddressArray.get(i).toString(), "delegation_responses", "balance")
-
-                    UpdateFCTAmount(urlReward+CommonInfo.AddressArray.get(i).toString() + urlRewardLast, "total", "amount")
                     Thread.sleep(1000)
                     channel.send(i)
 
                 }
+
+
+
             }
         }
     }
@@ -202,18 +193,24 @@ class MainFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        Log.d("Hey", "MainFrag onStart")
+        Log.d("Hey", "MainFrag onStart ${(binding.recyclerView.adapter as MainListAdapter).itemCount}")
         if(isUpdateFCT == false){
             isUpdateFCT = true
+            if((binding.recyclerView.adapter as MainListAdapter).itemCount != CommonInfo.AddressInfo.size){
+                ChangeItem()
+            }
             UpdateCoin()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d("Hey", "MainFrag onResume")
+        Log.d("Hey", "MainFrag onResume ${(binding.recyclerView.adapter as MainListAdapter).itemCount} ")
         if(isUpdateFCT == false){
             isUpdateFCT = true
+            if((binding.recyclerView.adapter as MainListAdapter).itemCount != CommonInfo.AddressInfo.size){
+                ChangeItem()
+            }
             UpdateCoin()
         }
     }

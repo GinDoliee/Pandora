@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 62 (91390) - https://sketch.com -->
+    <title>btn_plus</title>
+    <desc>Created with Sketch.</desc>
+    <g id="btn_plus" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="btn/button">
+            <circle id="Oval" fill="#F2F2F2" cx="18" cy="18" r="18"></circle>
+            <g id="ic/ic_function_camera" transform="translate(10.000000, 10.000000)" fill="#4CA7ED">
+                <polygon id="Add-/-Create-/-New" points="15.5 7.08163265 8.91836735 7.08163265 8.91836735 0.5 7.00510204 0.5 7.00510204 7.08163265 0.5 7.08163265 0.5 8.99489796 7.00510204 8.99489796 7.00510204 15.5 8.91836735 15.5 8.91836735 8.99489796 15.5 8.99489796"></polygon>
+            </g>
+        </g>
+        <rect x="0" y="0" width="36" height="36"></rect>
+    </g>
+</svg>

@@ -11,49 +11,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10sp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-
-        android:background="@drawable/ic_main_background"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textTotalFCT"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/textTotalKWR"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:layout_weight="1" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10sp"
-            android:layout_marginTop="5dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/ic_main_background"
             android:orientation="horizontal">
 
@@ -62,7 +30,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Name"
+                android:text="Ticker"
+                android:textStyle="bold"
                 android:textAlignment="center" />
 
             <TextView
@@ -71,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Price"
+                android:textStyle="bold"
                 android:textAlignment="center" />
 
             <TextView
@@ -79,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Change"
+                android:textStyle="bold"
                 android:textAlignment="center" />
 
             <TextView
@@ -87,43 +58,47 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Volume"
+                android:textStyle="bold"
                 android:textAlignment="center" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10sp"
-            android:layout_marginRight="10sp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:background="@drawable/ic_main_background"
+            android:weightSum="1"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0.25"
                 android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/textPrice"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0.25"
                 android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/textChange"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0.25"
                 android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/textVolume"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0.25"
                 android:textAlignment="center" />
         </LinearLayout>
 
@@ -132,8 +107,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10sp"
-        android:layout_marginBottom="10sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:orientation="vertical">
 
 

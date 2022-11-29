@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 62 (91390) - https://sketch.com -->
+    <title>ic_cabinet_nor</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="24.4897959%" x2="100%" y2="75.5102041%" id="linearGradient-1">
+            <stop stop-color="#CAC7FF" offset="0%"></stop>
+            <stop stop-color="#92E3EB" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="ic_cabinet_nor" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle id="Oval" fill="#FCFCFC" cx="20" cy="20" r="20"></circle>
+        <g id="signage_color" transform="translate(6.000000, 10.000000)" fill="url(#linearGradient-1)" fill-rule="nonzero">
+            <path d="M2.55,0 L25.45,0 C26.8583261,0 28,1.1416739 28,2.55 L28,17.45 C28,18.8583261 26.8583261,20 25.45,20 L2.55,20 C1.14167389,20 0,18.8583261 0,17.45 L0,2.55 C0,1.1416739 1.14167389,0 2.55,0 Z" id="Rectangle-15--8"></path>
+        </g>
+    </g>
+</svg>
