@@ -73,29 +73,27 @@ class MainFragment : Fragment() {
         urlReward = "https://lcd-mainnet.firmachain.dev:1317/cosmos/distribution/v1beta1/delegators/"
         urlRewardLast = "/rewards"
 
+        UpdateItem()
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
         binding.recyclerView.adapter = MainListAdapter(stakeData)
+
 
         UpdateCoin()
 
         GlobalScope.launch(Dispatchers.Main) {
             channel.consumeEach {
                 if((binding.recyclerView.adapter as MainListAdapter).itemCount != CommonInfo.AddressInfo.size){
-                    ChangeItem()
+                    UpdateItem()
                 }
 
-                    var stake = Stake(CommonInfo.AddressInfo.get(it).FCT_Address,CommonInfo.AddressInfo.get(it).FCT_Name)
-                    stake.coinAvailableAmount = coinAvailableAmount
-                    stake.coinDelegatedAmount = coinDelegatedAmount
-                    stake.coinRewardAmount = coinRewardAmount
-                    (binding.recyclerView.adapter as MainListAdapter).ChangeItem(it,stake)
-                }
+                binding.recyclerView.adapter?.notifyDataSetChanged()
+            }
         }
 
         super.onViewCreated(view, savedInstanceState)
     }
 
-    fun ChangeItem(){
+    fun UpdateItem(){
 
         stakeData.clear()
         for(i in 0 until CommonInfo.AddressInfo.size){
@@ -111,11 +109,12 @@ class MainFragment : Fragment() {
                 for (i in 0 until CommonInfo.AddressInfo.size) {
 
                     Log.d("Hey", "UpdateCoin : $i")
+
                     val address =CommonInfo.AddressInfo.get(i).FCT_Address
 
-                    UpdateFCTAmount(urlAvailable+address, "balances", "amount")
-                    UpdateFCTAmount(urlDelegated+address, "delegation_responses", "balance")
-                    UpdateFCTAmount(urlReward+address + urlRewardLast, "total", "amount")
+                    UpdateFCTAmount(urlAvailable+address, "balances", "amount",i)
+                    UpdateFCTAmount(urlDelegated+address, "delegation_responses", "balance",i)
+                    UpdateFCTAmount(urlReward+address + urlRewardLast, "total", "amount",i)
 
                     Thread.sleep(1000)
                     channel.send(i)
@@ -129,9 +128,9 @@ class MainFragment : Fragment() {
     }
 
 
-    fun UpdateFCTAmount(url:String, type:String, item:String){
+    fun UpdateFCTAmount(url:String, type:String, item:String, index:Int){
 
-        Log.d("Hey", "UpdateFCTAmout Called")
+        Log.d("Hey", "UpdateFCTAmout Called[$index]")
 
 
             val stringRequest = StringRequest(
@@ -145,8 +144,9 @@ class MainFragment : Fragment() {
 
                     if(type.equals("balances")) {
                         val jsonObject = jsonArray.getJSONObject(0)
-                        coinAvailableAmount = (jsonObject.getString(item)).toFloat()/DIVIDE_VALUE
-                        Log.d("Hey","coinAvailableAmount = $coinAvailableAmount")
+                        stakeData.get(index).coinAvailableAmount =(jsonObject.getString(item)).toFloat()/DIVIDE_VALUE
+
+                        Log.d("Hey","coinAvailableAmount[$index] = ${stakeData.get(index).coinAvailableAmount}")
                     }
 
                     if(type.equals("delegation_responses")){
@@ -159,13 +159,15 @@ class MainFragment : Fragment() {
                             var ToMap = JSONObject(JSONTokener(ToString))
                             delegateSUM  += ToMap.get("amount").toString().toFloat()/DIVIDE_VALUE
                         }
-                        coinDelegatedAmount = delegateSUM
+                        stakeData.get(index).coinDelegatedAmount = delegateSUM
+                        Log.d("Hey","coinDelegatedAmount[$index] = ${stakeData.get(index).coinDelegatedAmount}")
                     }
 
                     if(type.equals("total")){
                         val jsonObject = jsonArray.getJSONObject(0)
-                        coinRewardAmount = (jsonObject.getString(item)).toFloat()/DIVIDE_VALUE
-                        Log.d("Hey","coinRewardAmount = $coinRewardAmount")
+                        stakeData.get(index).coinRewardAmount = (jsonObject.getString(item)).toFloat()/DIVIDE_VALUE
+
+                        Log.d("Hey","coinRewardAmount[$index] = ${stakeData.get(index).coinRewardAmount}")
 
                     }
 
@@ -197,7 +199,7 @@ class MainFragment : Fragment() {
         if(isUpdateFCT == false){
             isUpdateFCT = true
             if((binding.recyclerView.adapter as MainListAdapter).itemCount != CommonInfo.AddressInfo.size){
-                ChangeItem()
+                UpdateItem()
             }
             UpdateCoin()
         }
@@ -209,7 +211,7 @@ class MainFragment : Fragment() {
         if(isUpdateFCT == false){
             isUpdateFCT = true
             if((binding.recyclerView.adapter as MainListAdapter).itemCount != CommonInfo.AddressInfo.size){
-                ChangeItem()
+                UpdateItem()
             }
             UpdateCoin()
         }
