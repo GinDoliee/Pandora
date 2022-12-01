@@ -26,7 +26,7 @@ class SecondFragment : Fragment() {
 
     lateinit var binding : FragmentSecondBinding
 
-    var supportCoinType = mutableListOf("ATOM", "MED", "LOOM", "ETH")
+    var supportCoinType = mutableListOf("ATOM", "MED", "LOOM", "ETH","XRP","ICX","SOL")
     var coinData = mutableListOf<Coin>()
 
     val channel = Channel<Int>()
@@ -50,7 +50,6 @@ class SecondFragment : Fragment() {
         Log.d("Hey","onViewCreated Called")
 
         mainActivity = context as MainActivity
-
         isUpdateCoin = true
 
         for(i in 0 until supportCoinType.size){
@@ -66,20 +65,17 @@ class SecondFragment : Fragment() {
                 (binding.recyclerView.adapter as SecondListAdapter).notifyDataSetChanged()
             }
         }
-
         UpdateCoins()
-
     }
 
     fun UpdateCoins(){
         scopeCoin.launch {
-
             while(isUpdateCoin) {
                 for (i in 0 until supportCoinType.size) {
                     UpdateCoins(supportCoinType.get(i), i)
                     channel.send(i)
+                    Thread.sleep(300)
                 }
-                Thread.sleep(1000)
             }
         }
     }

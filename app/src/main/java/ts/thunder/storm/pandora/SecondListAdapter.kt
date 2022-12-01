@@ -25,15 +25,15 @@ class SecondListAdapter(var context: Context, val data: MutableList<Coin>): Recy
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val binding = (holder as SecondHolder).binding
 
-        if(data[position].coinPrice<0) {
-            binding.textChange.setTextColor(Color.BLUE)
+        if(data[position].coinChange<0) {
             binding.textPrice.setTextColor(Color.BLUE)
-        }else if(data[position].coinPrice>0){
-            binding.textChange.setTextColor(Color.RED)
+            binding.textChange.setTextColor(Color.BLUE)
+        }else if(data[position].coinChange>0){
             binding.textPrice.setTextColor(Color.RED)
+            binding.textChange.setTextColor(Color.RED)
         }else{
-            binding.textChange.setTextColor(Color.BLACK)
             binding.textPrice.setTextColor(Color.BLACK)
+            binding.textChange.setTextColor(Color.BLACK)
         }
 
         binding.textName.text = data[position].cointName

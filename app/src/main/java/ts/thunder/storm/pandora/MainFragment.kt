@@ -113,19 +113,18 @@ class MainFragment : Fragment() {
                     val address =CommonInfo.AddressInfo.get(i).FCT_Address
 
                     UpdateFCTAmount(urlAvailable+address, "balances", "amount",i)
+                    Thread.sleep(500/CommonInfo.AddressInfo.size.toLong())
                     UpdateFCTAmount(urlDelegated+address, "delegation_responses", "balance",i)
+                    Thread.sleep(500/CommonInfo.AddressInfo.size.toLong())
                     UpdateFCTAmount(urlReward+address + urlRewardLast, "total", "amount",i)
+                    Thread.sleep(500/CommonInfo.AddressInfo.size.toLong())
 
-                    Thread.sleep(1000)
                     channel.send(i)
-
                 }
-
-
-
             }
         }
     }
+
 
 
     fun UpdateFCTAmount(url:String, type:String, item:String, index:Int){
@@ -145,11 +144,10 @@ class MainFragment : Fragment() {
                     if(type.equals("balances")) {
                         val jsonObject = jsonArray.getJSONObject(0)
                         stakeData.get(index).coinAvailableAmount =(jsonObject.getString(item)).toFloat()/DIVIDE_VALUE
-
                         Log.d("Hey","coinAvailableAmount[$index] = ${stakeData.get(index).coinAvailableAmount}")
                     }
 
-                    if(type.equals("delegation_responses")){
+                    else if(type.equals("delegation_responses")){
 
                         var delegateSUM = 0.0F
 
@@ -163,12 +161,15 @@ class MainFragment : Fragment() {
                         Log.d("Hey","coinDelegatedAmount[$index] = ${stakeData.get(index).coinDelegatedAmount}")
                     }
 
-                    if(type.equals("total")){
+                    else if(type.equals("total")){
                         val jsonObject = jsonArray.getJSONObject(0)
                         stakeData.get(index).coinRewardAmount = (jsonObject.getString(item)).toFloat()/DIVIDE_VALUE
 
                         Log.d("Hey","coinRewardAmount[$index] = ${stakeData.get(index).coinRewardAmount}")
 
+                    }
+                    else{
+                        Log.d("Hey","There is nothing")
                     }
 
                 },
