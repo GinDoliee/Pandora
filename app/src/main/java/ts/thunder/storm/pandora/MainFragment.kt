@@ -103,23 +103,48 @@ class MainFragment : Fragment() {
     }
 
     fun UpdateCoin(){
-        scopeFCT.launch {
-            while(isUpdateFCT) {
+        runBlocking {
+            scopeFCT.launch {
+                while (isUpdateFCT) {
 
-                for (i in 0 until CommonInfo.AddressInfo.size) {
+                    for (i in 0 until CommonInfo.AddressInfo.size) {
 
-                    Log.d("Hey", "UpdateCoin : $i")
+                        Log.d("Hey", "UpdateCoin : $i")
 
-                    val address =CommonInfo.AddressInfo.get(i).FCT_Address
+                        val address = CommonInfo.AddressInfo.get(i).FCT_Address
 
-                    UpdateFCTAmount(urlAvailable+address, "balances", "amount",i)
-                    Thread.sleep(600/CommonInfo.AddressInfo.size.toLong())
-                    UpdateFCTAmount(urlDelegated+address, "delegation_responses", "balance",i)
-                    Thread.sleep(600/CommonInfo.AddressInfo.size.toLong())
-                    UpdateFCTAmount(urlReward+address + urlRewardLast, "total", "amount",i)
-                    Thread.sleep(600/CommonInfo.AddressInfo.size.toLong())
 
-                    channel.send(i)
+                            UpdateFCTAmount(
+                                urlAvailable + address,
+                                "balances",
+                                "amount",
+                                i
+                            )
+
+
+
+                            UpdateFCTAmount(
+                                urlDelegated + address,
+                                "delegation_responses",
+                                "balance",
+                                i
+                            )
+
+
+
+                            UpdateFCTAmount(
+                                urlReward + address + urlRewardLast,
+                                "total",
+                                "amount",
+                                i
+                            )
+
+                        delay(1000)
+                        //Thread.sleep(1000)
+
+
+                        channel.send(i)
+                    }
                 }
             }
         }
@@ -127,7 +152,7 @@ class MainFragment : Fragment() {
 
 
 
-    fun UpdateFCTAmount(url:String, type:String, item:String, index:Int){
+    suspend fun UpdateFCTAmount(url:String, type:String, item:String, index:Int){
 
         Log.d("Hey", "UpdateFCTAmout Called[$index]")
 
@@ -186,6 +211,7 @@ class MainFragment : Fragment() {
         super.onPause()
         Log.d("Hey", "MainFrag onPause")
         isUpdateFCT = false
+
     }
 
     override fun onStop() {
