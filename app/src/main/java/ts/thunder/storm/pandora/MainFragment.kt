@@ -113,11 +113,11 @@ class MainFragment : Fragment() {
                     val address =CommonInfo.AddressInfo.get(i).FCT_Address
 
                     UpdateFCTAmount(urlAvailable+address, "balances", "amount",i)
-                    Thread.sleep(500/CommonInfo.AddressInfo.size.toLong())
+                    Thread.sleep(600/CommonInfo.AddressInfo.size.toLong())
                     UpdateFCTAmount(urlDelegated+address, "delegation_responses", "balance",i)
-                    Thread.sleep(500/CommonInfo.AddressInfo.size.toLong())
+                    Thread.sleep(600/CommonInfo.AddressInfo.size.toLong())
                     UpdateFCTAmount(urlReward+address + urlRewardLast, "total", "amount",i)
-                    Thread.sleep(500/CommonInfo.AddressInfo.size.toLong())
+                    Thread.sleep(600/CommonInfo.AddressInfo.size.toLong())
 
                     channel.send(i)
                 }

@@ -74,7 +74,7 @@ class SecondFragment : Fragment() {
                 for (i in 0 until supportCoinType.size) {
                     UpdateCoins(supportCoinType.get(i), i)
                     channel.send(i)
-                    Thread.sleep(300)
+                    Thread.sleep(1000)
                 }
             }
         }
