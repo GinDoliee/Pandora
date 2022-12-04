@@ -139,10 +139,7 @@ class MainFragment : Fragment() {
                                 i
                             )
 
-                        delay(1000)
-                        //Thread.sleep(1000)
-
-
+                        delay(3000)
                         channel.send(i)
                     }
                 }
