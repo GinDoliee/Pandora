@@ -75,7 +75,7 @@ class MainFragment : Fragment() {
 
         UpdateItem()
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        binding.recyclerView.adapter = MainListAdapter(stakeData)
+        binding.recyclerView.adapter = MainListAdapter(stakeData, mainActivity)
 
 
         UpdateCoin()
