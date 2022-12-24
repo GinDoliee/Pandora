@@ -48,7 +48,9 @@ class MainListAdapter(val data: MutableList<Stake>, fragContext: Context): Recyc
 
             clipboard.setPrimaryClip(clip)
 
+
             Toast.makeText(context, "Copied to ClipBoard", Toast.LENGTH_SHORT).show()
+
         }
     }
 

@@ -66,6 +66,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        var actionBar = supportActionBar
+        actionBar?.title = "Pandora"
+
+
 
         binding.viewpager.adapter = MyAdapter(this)
 

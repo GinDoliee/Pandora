@@ -11,6 +11,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -18,7 +20,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="NickName" />
+            android:text="NickName"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/editNickName"
@@ -28,12 +32,15 @@
             android:ems="10"
             android:hint="Nickname here"
             android:inputType="textPersonName"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColor="#000000" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -41,7 +48,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Address" />
+            android:text="Address"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/editAddress"
@@ -51,12 +60,14 @@
             android:ems="10"
             android:hint="Address here"
             android:inputType="textPersonName"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColor="#000000" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
         <TextView
@@ -70,7 +81,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Save" />
+            android:background="@drawable/ic_main_background"
+            android:text="Save"
+            android:textColor="#000000" />
 
         <TextView
             android:id="@+id/textView12"
@@ -83,7 +96,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Exit"/>
+            android:background="@drawable/ic_main_background"
+            android:text="Exit"
+            android:textColor="#000000" />
 
         <TextView
             android:id="@+id/textView7"
